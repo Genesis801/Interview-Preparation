@@ -49,6 +49,6 @@ void nQueens(int n){
     nQueenHelper(n,0);
 }
 int main(){
-    nQueens(8);
+    nQueens(4);
     return 0;
 }
