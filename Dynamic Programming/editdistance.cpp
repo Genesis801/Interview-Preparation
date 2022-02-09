@@ -25,7 +25,7 @@ int moves(string s,string t){
     }
 }
 //Memoization based approach
-int moves_mem(string s,string t,vector<vector<int>>& ans){
+int moves_mem(string s,string t,vector<vector<int>> ans){
     //Base case
     int m=s.size();
     int n=t.size();
@@ -58,12 +58,40 @@ int moves_mem(string s,string t,vector<vector<int>>& ans){
         return ans[m][n];
     }
 }
+//DP based approach with time complexity O(m*n)
+int moves_DP(string s,string t, vector<vector<int>> ans){
+    int m=s.size();
+    int n=t.size();
+
+    //Fill first row
+    for(int i=0;i<=n;i++){
+        ans[0][i]=i;
+    }
+    //Fill first column
+    for(int j=0;j<=m;j++){
+        ans[j][0]=j;
+    }
+    //Fill the rest of the cells
+
+    for(int i=1;i<=m;i++){
+        for(int j=1;j<=n;j++){
+            //check if the characters matches from the ending
+            if(s[m-i]==t[n-j]){
+                ans[i][j]=ans[i-1][j-1];
+            }
+            else{
+                ans[i][j]= 1+ min(ans[i-1][j-1], min(ans[i][j-1], ans[i-1][j]));
+            }
+        }
+    }
+    return ans[m][n];
+}
 int main(){
     string s,t;
     cin>>s>>t;
     //cout<<"Edit Distance Recursive: "<<moves(s,t)<<endl;
     int m=s.size();
-    int n=s.size();
+    int n=t.size();
 
     vector<vector<int>> ans(m+1);
     for(int i=0;i<m+1;i++){
@@ -74,4 +102,5 @@ int main(){
         ans[i]=a;
     }
     cout<<"Edit Distance Memoization: "<<moves_mem(s,t,ans)<<endl;
+    cout<<"Edit Distance DP: "<<moves_DP(s,t,ans)<<endl;
 }
