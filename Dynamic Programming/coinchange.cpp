@@ -1,5 +1,6 @@
 #include<bits/stdc++.h>
 using namespace std;
+//This code gives the number of ways a certain sum can be acheived using some denominations
 //Recursive code with exponential time complexity
 int coinChange(int* d,int m,int value){
     if(value==0)
@@ -29,6 +30,25 @@ int coinChange_mem(int *d,int m,int val, vector<vector<int>>& dp){
     }
 
 }
+int coinChange_DP(int *d,int m,int val, vector<vector<int>>dp){
+    for(int i=0;i<=m;i++){
+        dp[i][0]=1;
+    }
+    for(int j=1;j<=val;j++){
+        dp[0][j]=0;
+    }
+    for(int i=1;i<=m;i++){
+        for(int j=1;j<=val;j++){
+            if(d[i-1] > j){
+                dp[i][j] = dp[i-1][j];
+            }
+            else{
+                dp[i][j] = dp[i-1][j] + dp[i][j-d[i-1]];
+            }
+        }
+    }
+    return dp[m][val];
+}
 int main(){
     int m;
     cin>>m;
@@ -39,6 +59,7 @@ int main(){
     int val;
     cin>>val;
     cout<<"Coin change recursive: "<<coinChange(a,m,val)<<endl;
-    vector<vector<int>> dp(m+1, vector<int>(val+1,-1));
-    cout<<"Coin change memo: "<<coinChange_mem(a,m,val,dp)<<endl;
+    vector<vector<int>> dp(m+1, vector<int>(val+1));
+    //cout<<"Coin change DP: "<<coinChange_mem(a,m,val,dp)<<endl;
+    cout<<"Coin change DP: "<<coinChange_DP(a,m,val,dp)<<endl;
 }
